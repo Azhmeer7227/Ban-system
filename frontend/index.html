@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Real-time character ban/protect system for competitive gaming. Create rooms, select characters, and strategically ban and protect in alternating turns.">
+  <title>Arena Ban System — Character Ban & Protect</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- ═══ Ambient background ═══ -->
+  <div id="particles-bg"></div>
+
+  <!-- ═══ HOME PAGE ═══ -->
+  <div id="page-home" class="page active">
+    <div class="home-container">
+      <div class="logo-area">
+        <div class="logo-icon">⚔️</div>
+        <h1 class="logo-title">ARENA BAN</h1>
+        <p class="logo-subtitle">Strategic Character Ban &amp; Protect System</p>
+      </div>
+      <div class="home-actions">
+        <div class="action-card" id="create-room-card">
+          <div class="action-icon">🏰</div>
+          <h2>Create Room</h2>
+          <p>Start a new room and invite players</p>
+          <div class="input-group">
+            <input type="text" id="create-username" placeholder="Enter your username" maxlength="20" autocomplete="off">
+          </div>
+          <button id="btn-create-room" class="btn btn-primary">
+            <span class="btn-text">Create Room</span>
+            <span class="btn-glow"></span>
+          </button>
+        </div>
+        <div class="divider-or"><span>OR</span></div>
+        <div class="action-card" id="join-room-card">
+          <div class="action-icon">🚪</div>
+          <h2>Join Room</h2>
+          <p>Enter a room code to join an existing room</p>
+          <div class="input-group">
+            <input type="text" id="join-username" placeholder="Enter your username" maxlength="20" autocomplete="off">
+          </div>
+          <div class="input-group">
+            <input type="text" id="join-code" placeholder="Room Code (e.g. ABC123)" maxlength="6" autocomplete="off" style="text-transform: uppercase;">
+          </div>
+          <button id="btn-join-room" class="btn btn-secondary">
+            <span class="btn-text">Join Room</span>
+            <span class="btn-glow"></span>
+          </button>
+        </div>
+      </div>
+      <div id="home-error" class="error-message hidden"></div>
+    </div>
+  </div>
+
+  <!-- ═══ LOBBY PAGE ═══ -->
+  <div id="page-lobby" class="page">
+    <div class="lobby-container">
+      <div class="lobby-header">
+        <h1>⚔️ Room Lobby</h1>
+        <div class="room-code-display">
+          <span class="code-label">Room Code</span>
+          <span class="code-value" id="lobby-room-code">------</span>
+          <button class="btn-copy" id="btn-copy-code" title="Copy code">📋</button>
+        </div>
+      </div>
+      <div class="players-list" id="lobby-players-list"></div>
+      <div class="lobby-status" id="lobby-status">Waiting for players to join...</div>
+      <div id="admin-controls" class="hidden">
+        <button id="btn-start-selection" class="btn btn-primary btn-large" disabled>
+          <span class="btn-text">⚡ Start Selection Phase</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SELECTION PAGE ═══ -->
+  <div id="page-selection" class="page">
+    <div class="selection-container">
+      <div class="selection-header">
+        <h1>🎭 Select Your Characters</h1>
+        <p class="selection-subtitle">Choose characters to add to your roster</p>
+        <div class="selection-counter">Selected: <span id="selection-count">0</span></div>
+      </div>
+      <div class="characters-grid" id="characters-grid"></div>
+      <div class="selection-actions">
+        <button id="btn-confirm-selection" class="btn btn-primary btn-large" disabled>
+          <span class="btn-text">✅ Confirm Selection</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+      <div id="admin-selection-view" class="hidden">
+        <div class="admin-spectate-badge">👁️ Spectating</div>
+        <div class="spectate-players" id="spectate-selection-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ COIN TOSS PAGE ═══ -->
+  <div id="page-cointoss" class="page">
+    <div class="cointoss-container">
+      <h1>🎲 Coin Toss</h1>
+      <p class="cointoss-subtitle">Deciding who bans first...</p>
+      <div class="coin" id="coin">
+        <div class="coin-front">⚔️</div>
+        <div class="coin-back">🛡️</div>
+      </div>
+      <div class="cointoss-result hidden" id="cointoss-result">
+        <div class="winner-announcement">
+          <span class="winner-label">First Pick Goes To</span>
+          <span class="winner-name" id="cointoss-winner-name">---</span>
+        </div>
+        <button id="btn-proceed-ban" class="btn btn-primary btn-large">
+          <span class="btn-text">⚔️ Proceed to Ban Phase</span>
+          <span class="btn-glow"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BAN PHASE PAGE ═══ -->
+  <div id="page-banphase" class="page">
+    <div class="banphase-container">
+      <div class="banphase-header">
+        <h1>⚔️ Ban &amp; Protect Phase</h1>
+        <div class="turn-indicator" id="turn-indicator">
+          <span class="turn-label">Current Turn</span>
+          <span class="turn-player" id="turn-player-name">---</span>
+          <span class="turn-action" id="turn-action">---</span>
+        </div>
+      </div>
+      <div class="banphase-layout">
+        <!-- Left panel: Your characters -->
+        <div class="banphase-panel panel-left">
+          <h2 class="panel-title" id="panel-left-title">Your Characters</h2>
+          <div class="character-list" id="your-characters-list"></div>
+          <div class="slots-display">
+            <div class="slots-row">
+              <span class="slot-label">🚫 Bans on you:</span>
+              <div class="slot-icons" id="your-bans-slots"></div>
+            </div>
+            <div class="slots-row">
+              <span class="slot-label">🛡️ Your protects:</span>
+              <div class="slot-icons" id="your-protects-slots"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Center: Action area -->
+        <div class="banphase-center">
+          <div id="action-area" class="hidden">
+            <div class="action-section" id="ban-section">
+              <h3>🚫 Ban from opponent</h3>
+              <div class="action-characters" id="ban-target-list"></div>
+              <div class="selected-action" id="selected-ban">
+                <span>Selected ban: </span><span id="ban-choice-label">None</span>
+              </div>
+            </div>
+            <div class="action-section" id="protect-section">
+              <h3>🛡️ Protect your own</h3>
+              <div class="action-characters" id="protect-target-list"></div>
+              <div class="selected-action" id="selected-protect">
+                <span>Selected protect: </span><span id="protect-choice-label">None</span>
+              </div>
+            </div>
+            <button id="btn-confirm-action" class="btn btn-primary" disabled>
+              <span class="btn-text">✅ Confirm</span>
+              <span class="btn-glow"></span>
+            </button>
+          </div>
+          <div id="waiting-area" class="hidden">
+            <div class="waiting-spinner"></div>
+            <p>Waiting for opponent...</p>
+          </div>
+        </div>
+        <!-- Right panel: Opponent characters -->
+        <div class="banphase-panel panel-right">
+          <h2 class="panel-title" id="panel-right-title">Opponent's Characters</h2>
+          <div class="character-list" id="opponent-characters-list"></div>
+          <div class="slots-display">
+            <div class="slots-row">
+              <span class="slot-label">🚫 Bans on them:</span>
+              <div class="slot-icons" id="opponent-bans-slots"></div>
+            </div>
+            <div class="slots-row">
+              <span class="slot-label">🛡️ Their protects:</span>
+              <div class="slot-icons" id="opponent-protects-slots"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="turn-history" id="turn-history">
+        <h3>📜 Turn History</h3>
+        <div class="history-entries" id="history-entries"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RESULTS PAGE ═══ -->
+  <div id="page-results" class="page">
+    <div class="results-container">
+      <div class="results-header">
+        <h1>🏆 Final Results</h1>
+        <p>Ban &amp; Protect Phase Complete</p>
+      </div>
+      <div class="results-layout">
+        <div class="results-player" id="results-player1">
+          <h2 class="results-player-name" id="results-p1-name">Player 1</h2>
+          <div class="results-section">
+            <h3>🚫 Banned Characters</h3>
+            <div class="results-characters" id="results-p1-bans"></div>
+          </div>
+          <div class="results-section">
+            <h3>🛡️ Protected Characters</h3>
+            <div class="results-characters" id="results-p1-protects"></div>
+          </div>
+          <div class="results-section">
+            <h3>✅ Remaining Characters</h3>
+            <div class="results-characters" id="results-p1-remaining"></div>
+          </div>
+        </div>
+        <div class="results-vs">VS</div>
+        <div class="results-player" id="results-player2">
+          <h2 class="results-player-name" id="results-p2-name">Player 2</h2>
+          <div class="results-section">
+            <h3>🚫 Banned Characters</h3>
+            <div class="results-characters" id="results-p2-bans"></div>
+          </div>
+          <div class="results-section">
+            <h3>🛡️ Protected Characters</h3>
+            <div class="results-characters" id="results-p2-protects"></div>
+          </div>
+          <div class="results-section">
+            <h3>✅ Remaining Characters</h3>
+            <div class="results-characters" id="results-p2-remaining"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
