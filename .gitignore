@@ -1,0 +1,187 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# ──────────────────────────────────────────────
+# Dependencies
+# ──────────────────────────────────────────────
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ──────────────────────────────────────────────
+# Build / Output
+# ──────────────────────────────────────────────
+/.next/
+/out/
+/build
+/dist
+*.tsbuildinfo
+next-env.d.ts
+
+# ──────────────────────────────────────────────
+# Testing
+# ──────────────────────────────────────────────
+/coverage
+
+# ──────────────────────────────────────────────
+# Environment & Secrets
+# ──────────────────────────────────────────────
+.env*
+*.pem
+*.key
+*.cert
+
+# ──────────────────────────────────────────────
+# OS & IDE junk
+# ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# ──────────────────────────────────────────────
+# Debug logs
+# ──────────────────────────────────────────────
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ──────────────────────────────────────────────
+# Vercel
+# ──────────────────────────────────────────────
+.vercel
+
+# ──────────────────────────────────────────────
+# Large / binary video & audio files
+# ──────────────────────────────────────────────
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.m4v
+*.mpg
+*.mpeg
+*.3gp
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.wma
+*.m4a
+
+# ──────────────────────────────────────────────
+# Large images & raw photos
+# ──────────────────────────────────────────────
+*.psd
+*.ai
+*.sketch
+*.fig
+*.xd
+*.raw
+*.cr2
+*.nef
+*.dng
+*.tiff
+*.tif
+*.bmp
+*.ico
+
+# ──────────────────────────────────────────────
+# Archives & compressed files
+# ──────────────────────────────────────────────
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.tar.bz2
+*.tar.xz
+*.rar
+*.7z
+*.gz
+*.bz2
+*.xz
+*.zst
+
+# ──────────────────────────────────────────────
+# Databases & data dumps
+# ──────────────────────────────────────────────
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.mdb
+*.accdb
+*.dump
+
+# ──────────────────────────────────────────────
+# Datasets, models & big data
+# ──────────────────────────────────────────────
+*.csv
+*.tsv
+*.parquet
+*.avro
+*.feather
+*.hdf5
+*.h5
+*.pkl
+*.pickle
+*.joblib
+*.npy
+*.npz
+*.pt
+*.pth
+*.onnx
+*.pb
+*.tflite
+*.safetensors
+*.bin
+
+# ──────────────────────────────────────────────
+# Disk images & virtual machines
+# ──────────────────────────────────────────────
+*.iso
+*.img
+*.vmdk
+*.vdi
+*.vhd
+*.qcow2
+
+# ──────────────────────────────────────────────
+# Executables & compiled binaries
+# ──────────────────────────────────────────────
+*.exe
+*.msi
+*.dll
+*.so
+*.dylib
+*.o
+*.obj
+*.lib
+*.a
+*.class
+*.jar
+*.war
+*.ear
+*.pyc
+*.pyo
+
+# ──────────────────────────────────────────────
+# Misc large / generated
+# ──────────────────────────────────────────────
+*.log
+*.bak
+*.tmp
+*.cache
